@@ -27,11 +27,11 @@ function CartProvider({ children }) {
       if (itemExists) {
         updatedCart = prevCart.map((item) =>
           item.id === product.id
-            ? { ...item, quantity: item.quantity + 1 }
+            ? { ...item }
             : item
         );
       } else {
-        updatedCart = [...prevCart, { ...product, quantity: 1 }];
+        updatedCart = [...prevCart, { ...product }];
       }
       saveCartToLocalStorage(updatedCart); // Save updated cart to localStorage
       return updatedCart;

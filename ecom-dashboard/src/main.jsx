@@ -4,6 +4,7 @@ import App from "./App.jsx";
 import ProductInfo from "./components/ProductInfo.jsx";
 import Cart from "./components/Cart.jsx";
 import CartProvider from "./components/CartContext.jsx";
+import Checkout from "./components/Checkout.jsx";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
   {
     path: "/cart",
     element: <Cart />,
+  },
+  {
+    path: "/checkout",
+    element: <Checkout />,
   },
 ]);
 

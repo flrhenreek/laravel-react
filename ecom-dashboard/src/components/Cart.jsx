@@ -1,12 +1,13 @@
 import { useContext } from "react";
 import { CartContext } from "./CartContext";
+import { Link } from "react-router-dom";
 import Header from "./Header";
 
 export default function Cart() {
   const { cart, removeFromCart, clearCart } = useContext(CartContext);
 
   function getTotalPrice() {
-    return cart.reduce((total, item) => total + item.price * item.quantity, 0);
+    return cart.reduce((total, item) => total + item.price, 0);
   }
 
   return (
@@ -26,11 +27,11 @@ export default function Cart() {
                 >
                   <div>
                     <div className="cart-title">{item.name}</div>
-                    <div className="cart-item-price">Price: ${item.price}</div>
+                    <div className="cart-item-price">
+                      Price: ${item.price / 100}
+                    </div>
                     <img
-                      src={`http://127.0.0.1:8000/images/${encodeURIComponent(
-                        item.image
-                      )}`}
+                      src={`http://127.0.0.1:8000/images/${item.image}`}
                       className="cart-img align-items-right"
                       alt={item.name}
                     />
@@ -43,13 +44,16 @@ export default function Cart() {
                   </button>
                 </div>
               ))}
-              <h3 className="cart-total">Total: ${getTotalPrice()}</h3>
+              <h3 className="cart-total">Total: ${getTotalPrice() / 100}</h3>
               <button
                 className="btn btn-warning mt-3 cart-clear-button"
                 onClick={clearCart}
               >
                 Clear Cart
               </button>
+              <Link to="/checkout" className="btn btn-primary checkout-button">
+                Checkout
+              </Link>
             </>
           )}
         </div>
