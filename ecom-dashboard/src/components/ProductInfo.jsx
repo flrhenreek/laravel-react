@@ -47,7 +47,7 @@ export default function ProductInfo() {
             <div className="col-sm-9">
               <h5 className="product-info-title">{product.name}</h5>
               <p className="product-info-desc">{product.description}</p>
-              <p className="product-info-price">${product.price}</p>
+              <p className="product-info-price">${product.price / 100}</p>
               <button
                 className="btn btn-primary product-info-button"
                 onClick={() => {
