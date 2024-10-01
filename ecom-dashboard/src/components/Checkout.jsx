@@ -1,114 +1,101 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
+import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
+import axios from "axios";
 import Header from "./Header";
-import { CartContext } from "./CartContext"; // Assuming you have a CartContext for cart state
 
 function Checkout() {
-  const { cart, removeFromCart } = useContext(CartContext); // Access cart state and functions from context
+  const stripe = useStripe();
+  const elements = useElements();
+  const [amount, setAmount] = useState("");
+  const [currency, setCurrency] = useState("eur");
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  const [formData, setFormData] = useState({
-    fullName: "",
-    address: "",
-    city: "",
-    postalCode: "",
-    cardNumber: "",
-    expiryDate: "",
-    cvv: "",
-  });
+  async function handleSubmit(event) {
+    event.preventDefault();
+    setError(null);
+    setLoading(true);
 
-  function handleChange(e) {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  }
+    const cardElement = elements.getElement(CardElement);
 
-  function handleSubmit(e) {
-    e.preventDefault();
-    // Handle form submission (e.g., send data to backend)
-    console.log("Order Submitted: ", formData);
-  }
+    if (!cardElement) return;
 
-  function getTotalPrice(cart) {
-    return cart.reduce((total, item) => {
-      return total + item.price; // assuming each item has a price and quantity
-    }, 0);
+    try {
+      const { paymentMethod, error: stripeError } =
+        await stripe.createPaymentMethod({
+          type: "card",
+          card: cardElement,
+        });
+
+      if (stripeError) {
+        setError(stripeError.message);
+        setLoading(false);
+        return;
+      }
+
+      // Send paymentMethod.id and amount to your backend
+      const response = await axios.post(`http://127.0.0.1:8000/api/purchase`, {
+        paymentMethodId: paymentMethod.id,
+        amount: parseFloat(amount),
+        currency: currency,
+      });
+
+      const { paymentIntent, status } = response.data;
+
+      if (status === "success") {
+        // Check if further action (like 3D secure) is required
+        if (paymentIntent.status === "requires_action") {
+          const { error: confirmError } = await stripe.confirmCardPayment(
+            paymentIntent.client_secret
+          );
+
+          if (confirmError) {
+            setError(confirmError.message);
+            setLoading(false);
+            return;
+          }
+
+          alert("Payment successful!");
+        } else {
+          alert("Payment successful!");
+        }
+      }
+    } catch (error) {
+      setError("Payment failed. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
     <>
-      <Header />
-      <div className="checkout-container">
-        {/* <h2>Checkout</h2>
-        <form onSubmit={handleSubmit}>
-          <div className="form-section">
-            <h3>Order Summary</h3>
-            <div className="order-summary">
-              {cart.length === 0 ? (
-                <p className="empty-cart">Your cart is empty.</p>
-              ) : (
-                <>
-                  {cart.map((item) => (
-                    <div
-                      key={item.id}
-                      className="cart-item mb-3 p-3 border d-flex justify-content-between align-items-center"
-                    >
-                      <div>
-                        <div className="cart-title">{item.name}</div>
-                        <div className="cart-item-price">
-                          Price: ${item.price / 100}
-                        </div>
-                        <img
-                          src={`http://127.0.0.1:8000/images/${item.image}`}
-                          className="cart-img align-items-right"
-                          alt={item.name}
-                        />
-                      </div>
-                    </div>
-                  ))}
-                  <h3 className="cart-total">
-                    Total: ${getTotalPrice(cart) / 100}
-                  </h3>
-                </>
-              )}
-            </div>
-          </div> */}
-
-        {/* Payment Information */}
-        <form>
-          <div className="form-section">
-            <h3>Payment Information</h3>
-            <div>
-              <label>Card Number</label>
-              <input
-                type="text"
-                name="cardNumber"
-                value={formData.cardNumber}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div>
-              <label>Expiry Date</label>
-              <input
-                type="text"
-                name="expiryDate"
-                value={formData.expiryDate}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div>
-              <label>CVV</label>
-              <input
-                type="text"
-                name="cvv"
-                value={formData.cvv}
-                onChange={handleChange}
-                required
-              />
-            </div>
-          </div>
-
-          <button type="submit">Place Order</button>
-        </form>
-      </div>
+      <Header></Header>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label>Amount:</label>
+          <input
+            type="number"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+            required
+          />
+        </div>
+        <div>
+          <label>Currency:</label>
+          <select
+            value={currency}
+            onChange={(e) => setCurrency(e.target.value)}
+          >
+            <option value="usd">USD</option>
+            <option value="eur">EUR</option>
+          </select>
+        </div>
+        <CardElement />
+        {error && <div>{error}</div>}
+        <button type="submit" disabled={!stripe || loading}>
+          {loading ? "Processing..." : "Pay"}
+        </button>
+      </form>
     </>
   );
 }

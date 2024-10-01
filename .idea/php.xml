@@ -67,7 +67,6 @@
       <path value="$PROJECT_DIR$/ecom-backend/vendor/ta-tikoma/phpunit-architecture-test" />
       <path value="$PROJECT_DIR$/ecom-backend/vendor/symfony/mime" />
       <path value="$PROJECT_DIR$/ecom-backend/vendor/symfony/error-handler" />
-      <path value="$PROJECT_DIR$/ecom-backend/vendor/symfony/polyfill-php72" />
       <path value="$PROJECT_DIR$/ecom-backend/vendor/symfony/polyfill-intl-idn" />
       <path value="$PROJECT_DIR$/ecom-backend/vendor/symfony/event-dispatcher-contracts" />
       <path value="$PROJECT_DIR$/ecom-backend/vendor/symfony/event-dispatcher" />
@@ -140,11 +139,20 @@
       <path value="$PROJECT_DIR$/ecom-backend/vendor/league/flysystem-local" />
       <path value="$PROJECT_DIR$/ecom-backend/vendor/laravel/breeze" />
       <path value="$PROJECT_DIR$/ecom-backend/vendor/laravel/sanctum" />
+      <path value="$PROJECT_DIR$/ecom-backend/vendor/moneyphp/money" />
+      <path value="$PROJECT_DIR$/ecom-backend/vendor/stripe/stripe-php" />
+      <path value="$PROJECT_DIR$/ecom-backend/vendor/symfony/polyfill-intl-icu" />
+      <path value="$PROJECT_DIR$/ecom-backend/vendor/laravel/cashier" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.2" />
   <component name="PhpStanOptionsConfiguration">
     <option name="transferred" value="true" />
+  </component>
+  <component name="PhpUnit">
+    <phpunit_settings>
+      <PhpUnitSettings configuration_file_path="$PROJECT_DIR$/ecom-backend/phpunit.xml" custom_loader_path="$PROJECT_DIR$/ecom-backend/vendor/autoload.php" paratest_path="$PROJECT_DIR$/ecom-backend/vendor/bin/paratest_for_phpstorm" use_configuration_file="true" />
+    </phpunit_settings>
   </component>
   <component name="PsalmOptionsConfiguration">
     <option name="transferred" value="true" />

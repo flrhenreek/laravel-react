@@ -12,3 +12,4 @@ Route::get('/products/{id}', [\App\Http\Controllers\ProductController::class, 's
 Route::get('/cart', [\App\Http\Controllers\CartController::class, 'index']);
 Route::post('/cart/add', [\App\Http\Controllers\CartController::class, 'add']);
 Route::post('/cart/remove', [\App\Http\Controllers\CartController::class, 'remove']);
+Route::post('/purchase', [\App\Http\Controllers\PurchaseController::class, 'processPayment']);
