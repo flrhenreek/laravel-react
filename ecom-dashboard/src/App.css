@@ -190,7 +190,7 @@
   margin-bottom: 10px;
 }
 
-.checkout-button {
+.checkout-in-cart {
   margin-left: 125px;
   margin-bottom: 10px;
 }
@@ -283,4 +283,8 @@ button:hover {
   background-color: #e9ecef;
   padding: 10px;
   border-radius: 4px;
+}
+
+.checkout-button {
+  position: relative;
 }

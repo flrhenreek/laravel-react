@@ -1,5 +1,11 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, useContext } from "react";
+
 export const CartContext = createContext();
+
+// Custom hook to use the CartContext
+export const useCart = () => {
+  return useContext(CartContext);
+};
 
 function CartProvider({ children }) {
   const [cart, setCart] = useState([]);
@@ -21,18 +27,18 @@ function CartProvider({ children }) {
 
   // Add an item to the cart
   function addToCart(product) {
+    console.log(`Adding product: ${JSON.stringify(product)}`); // Log the product being added
     setCart((prevCart) => {
       const itemExists = prevCart.find((item) => item.id === product.id);
       let updatedCart;
       if (itemExists) {
         updatedCart = prevCart.map((item) =>
-          item.id === product.id
-            ? { ...item }
-            : item
+          item.id === product.id ? { ...item } : item
         );
       } else {
         updatedCart = [...prevCart, { ...product }];
       }
+      console.log("Updated cart state:", updatedCart); // Log updated cart state
       saveCartToLocalStorage(updatedCart); // Save updated cart to localStorage
       return updatedCart;
     });
@@ -53,6 +59,14 @@ function CartProvider({ children }) {
     localStorage.removeItem("cart"); // Clear cart from localStorage
   }
 
+  // Calculate the total price of items in the cart in cents
+  const cartTotal = cart.reduce((total, item) => {
+    console.log(`Item price: ${item.price}`); // Log each item's price
+    return total + item.price;
+  }, 0); // Assuming item.price is in cents
+
+  console.log(`Cart total (in cents): ${cartTotal}`); // Log the total amount in cents
+
   // Every time the cart state changes, save the updated cart to localStorage
   useEffect(() => {
     if (cart.length > 0) {
@@ -62,7 +76,7 @@ function CartProvider({ children }) {
 
   return (
     <CartContext.Provider
-      value={{ cart, addToCart, removeFromCart, clearCart }}
+      value={{ cart, addToCart, removeFromCart, clearCart, cartTotal }} // Expose cartTotal
     >
       {children}
     </CartContext.Provider>

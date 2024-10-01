@@ -51,7 +51,7 @@ export default function Cart() {
               >
                 Clear Cart
               </button>
-              <Link to="/checkout" className="btn btn-primary checkout-button">
+              <Link to="/checkout" className="btn btn-primary checkout-in-cart">
                 Checkout
               </Link>
             </>

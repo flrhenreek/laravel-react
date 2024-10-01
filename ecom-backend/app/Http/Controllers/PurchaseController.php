@@ -25,7 +25,7 @@ class PurchaseController extends Controller
         try {
             // Create a PaymentIntent with the specified amount, currency, and payment method
             $paymentIntent = PaymentIntent::create([
-                'amount' => $request->amount * 100, // Convert to cents
+                'amount' => $request->amount, // Convert to cents
                 'currency' => $request->currency,
                 'payment_method' => $request->paymentMethodId,
                 'confirmation_method' => 'manual',
