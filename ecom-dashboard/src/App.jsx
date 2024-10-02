@@ -3,6 +3,7 @@ import Header from "./components/Header";
 import Product from "./components/Product";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import Footer from "./components/Footer";
 
 function App() {
   // State to store products
@@ -47,6 +48,7 @@ function App() {
           ))}
         </div>
       </div>
+      <Footer></Footer>
     </>
   );
 }

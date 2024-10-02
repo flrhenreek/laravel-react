@@ -1,8 +1,8 @@
-import React from "react";
-import "../App.css";
 import { Link } from "react-router-dom";
 import { useContext } from "react";
 import { CartContext } from "./CartContext";
+import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function Product({ product }) {
   const imageUrl = `http://127.0.0.1:8000/images/${product.image}`;
@@ -13,6 +13,7 @@ export default function Product({ product }) {
       <Link to={`/product-info/${product.id}`} className="custom-link">
         <img src={imageUrl} className="card-img-top" alt={product.name} />
       </Link>
+      <FontAwesomeIcon icon={faHeart} />
       <div className="card-body">
         <h5 className="card-title">{product.name}</h5>
         <p className="card-text">{product.description}</p>
